@@ -1,7 +1,7 @@
 use std::{collections::HashMap, fs};
 
 use crate::solutions::day_2::rock_paper_scissors::{Action, Game, GamePlay, Result, Round};
-use crate::solutions::types::Solution;
+use crate::solutions::traits::Solution;
 
 pub struct Day2<'a> {
     data: Vec<Vec<&'a str>>,
@@ -107,27 +107,6 @@ impl<'a> Day2<'a> {
         return Day2::get_total_score(&game);
     }
 
-    pub fn solution() -> Solution {
-        let contents = fs::read_to_string("src/inputs/day_2_input.txt").unwrap();
-
-        let groups = contents.split("\n").map(|group| group.split(" "));
-
-        let data = groups
-            .map(|group| group.into_iter().collect::<Vec<&str>>())
-            .into_iter()
-            .collect::<Vec<Vec<&str>>>();
-
-        let mut day_2 = Day2::new(data);
-
-        let part_1_soln = day_2.part_1() as u64;
-        let part_2_soln = day_2.part_2() as u64;
-
-        return Solution {
-            part_1_soln,
-            part_2_soln,
-        };
-    }
-
     fn convert_string_to_action(string_action: &str) -> Action {
         if string_action == "A" || string_action == "X" {
             return Action::ROCK;
@@ -151,5 +130,28 @@ impl<'a> Day2<'a> {
         }
 
         return total_score;
+    }
+}
+
+impl<'a> Solution for Day2<'a> {
+    type PartOne = u32;
+    type PartTwo = u32;
+
+    fn solution() -> (Self::PartOne, Self::PartTwo) {
+        let contents = fs::read_to_string("src/inputs/day_2_input.txt").unwrap();
+
+        let groups = contents.split("\n").map(|group| group.split(" "));
+
+        let data = groups
+            .map(|group| group.into_iter().collect::<Vec<&str>>())
+            .into_iter()
+            .collect::<Vec<Vec<&str>>>();
+
+        let mut day_2 = Day2::new(data);
+
+        let part_1_soln = day_2.part_1() as u32;
+        let part_2_soln = day_2.part_2() as u32;
+
+        (part_1_soln, part_2_soln)
     }
 }

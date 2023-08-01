@@ -1,6 +1,6 @@
 use std::{collections::HashMap, fs};
 
-use crate::solutions::types::Solution;
+use crate::solutions::traits::Solution;
 
 pub struct Day3<'a> {
     data: Vec<&'a str>,
@@ -11,8 +11,8 @@ impl<'a> Day3<'a> {
         return Day3 { data };
     }
 
-    fn part_1(&self) -> u64 {
-        let mut duplicate_map: HashMap<u64, Vec<String>> = HashMap::new();
+    fn part_1(&self) -> u32 {
+        let mut duplicate_map: HashMap<u32, Vec<String>> = HashMap::new();
 
         for (index, item) in self.data.clone().into_iter().enumerate() {
             let mid = item.len() / 2;
@@ -20,7 +20,7 @@ impl<'a> Day3<'a> {
 
             first_half.chars().for_each(|c| {
                 if second_half.contains(c) {
-                    let vec_value = duplicate_map.entry(index as u64).or_insert(vec![]);
+                    let vec_value = duplicate_map.entry(index as u32).or_insert(vec![]);
 
                     if !vec_value.contains(&c.to_string()) {
                         vec_value.push(c.to_string());
@@ -32,7 +32,7 @@ impl<'a> Day3<'a> {
         let mut total_pririoty = 0;
 
         for i in 0..self.data.len() {
-            let option_map_value = duplicate_map.get(&(i as u64));
+            let option_map_value = duplicate_map.get(&(i as u32));
 
             match option_map_value {
                 Some(v) => {
@@ -45,7 +45,7 @@ impl<'a> Day3<'a> {
         return total_pririoty;
     }
 
-    fn part_2(&self) -> u64 {
+    fn part_2(&self) -> u32 {
         let mut elf_groups: Vec<Vec<&str>> = vec![];
 
         let group_max = 3;
@@ -73,7 +73,7 @@ impl<'a> Day3<'a> {
         return total_badges_pririoty;
     }
 
-    fn get_total_vec_priority(arr: &Vec<String>) -> u64 {
+    fn get_total_vec_priority(arr: &Vec<String>) -> u32 {
         let mut total_priority = 0;
         for c in arr.into_iter() {
             total_priority += Day3::priority(c);
@@ -82,8 +82,8 @@ impl<'a> Day3<'a> {
         return total_priority;
     }
 
-    fn priority(letter: &str) -> u64 {
-        let mut pririoty: u64 = 0;
+    fn priority(letter: &str) -> u32 {
+        let mut pririoty: u32 = 0;
 
         for i in (b'a'..=b'z').chain(b'A'..=b'Z') {
             let number = if i.is_ascii_lowercase() {
@@ -93,7 +93,7 @@ impl<'a> Day3<'a> {
             };
 
             if (i as char).to_string().as_str() == letter {
-                pririoty = number as u64;
+                pririoty = number as u32;
             }
         }
 
@@ -111,8 +111,13 @@ impl<'a> Day3<'a> {
 
         largest
     }
+}
 
-    pub fn solution() -> Solution {
+impl<'a> Solution for Day3<'a> {
+    type PartOne = u32;
+    type PartTwo = u32;
+
+    fn solution() -> (Self::PartOne, Self::PartTwo) {
         let read_string = fs::read_to_string("src/inputs/day_3_input.txt").unwrap();
 
         let parsed_input = read_string.split("\n").collect::<Vec<&str>>();
@@ -122,9 +127,6 @@ impl<'a> Day3<'a> {
 
         let part_2_soln = day_3.part_2();
 
-        return Solution {
-            part_1_soln,
-            part_2_soln,
-        };
+        (part_1_soln, part_2_soln)
     }
 }

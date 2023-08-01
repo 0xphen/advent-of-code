@@ -1,4 +1,4 @@
-use crate::solutions::types::Solution;
+use crate::solutions::traits::Solution;
 
 use std::{collections::HashMap, collections::HashSet, fs::File, io::BufRead, io::BufReader};
 
@@ -45,29 +45,6 @@ impl<'a> Day4 {
         return count;
     }
 
-    pub fn solution() -> Solution {
-        let file = File::open("src/inputs/day_4_input.txt").expect("Failed to open file");
-        let lines = BufReader::new(file).lines();
-
-        let mut pair_map: HashMap<usize, Vec<Vec<u32>>> = HashMap::new();
-
-        for (index, line) in lines.enumerate() {
-            if let Ok(l) = line {
-                let parsed_sections = Day4::parse_line_into_vec(l);
-                pair_map.insert(index, parsed_sections);
-            }
-        }
-
-        let day_4 = Day4::new(pair_map);
-        let part_1_soln = day_4.part_1();
-        let part_2_soln = day_4.part_2();
-
-        return Solution {
-            part_1_soln: part_1_soln as u64,
-            part_2_soln: part_2_soln as u64,
-        };
-    }
-
     fn parse_line_into_vec(line: String) -> Vec<Vec<u32>> {
         let split_line = line
             .split(",")
@@ -90,5 +67,30 @@ impl<'a> Day4 {
         }
 
         return (b, a);
+    }
+}
+
+impl Solution for Day4 {
+    type PartOne = u32;
+    type PartTwo = u32;
+
+    fn solution() -> (Self::PartOne, Self::PartTwo) {
+        let file = File::open("src/inputs/day_4_input.txt").expect("Failed to open file");
+        let lines = BufReader::new(file).lines();
+
+        let mut pair_map: HashMap<usize, Vec<Vec<u32>>> = HashMap::new();
+
+        for (index, line) in lines.enumerate() {
+            if let Ok(l) = line {
+                let parsed_sections = Day4::parse_line_into_vec(l);
+                pair_map.insert(index, parsed_sections);
+            }
+        }
+
+        let day_4 = Day4::new(pair_map);
+        let part_1_soln = day_4.part_1();
+        let part_2_soln = day_4.part_2();
+
+        (part_1_soln, part_2_soln)
     }
 }

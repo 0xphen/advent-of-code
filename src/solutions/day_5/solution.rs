@@ -1,6 +1,6 @@
 use std::{fs::File, io::BufRead, io::BufReader};
 
-use crate::solutions::types::Solution;
+use crate::solutions::traits::Solution;
 
 //Starting stack
 // [N]         [C]     [Z]
@@ -13,7 +13,7 @@ use crate::solutions::types::Solution;
 // [T] [L] [D] [G] [P] [P] [V] [N] [R]
 //  1   2   3   4   5   6   7   8   9
 
-struct Instructions {
+struct Instruction {
     count: u32,
     from: u32,
     to: u32,
@@ -33,7 +33,15 @@ impl<'a> Day5<'a> {
     }
 
     fn part_1(&mut self) -> String {
-        for instruction in self.instructions.iter() {
+        return self.move_crate_and_get_top_stacks(true);
+    }
+
+    fn part_2(&mut self) -> String {
+        return self.move_crate_and_get_top_stacks(false);
+    }
+
+    fn move_crate_and_get_top_stacks(&mut self, rev: bool) -> String {
+        for instruction in self.instructions.iter_mut() {
             let instruction = Day5::decode_instruction(instruction);
 
             let from_stack_index = (instruction.from - 1) as usize;
@@ -47,7 +55,11 @@ impl<'a> Day5<'a> {
                 .drain(start_index..)
                 .collect::<Vec<&str>>();
 
-            self.stacks[to_stack_index].extend(slice_stack.into_iter().rev());
+            if rev {
+                self.stacks[to_stack_index].extend(slice_stack.into_iter().rev());
+            } else {
+                self.stacks[to_stack_index].extend(slice_stack.into_iter());
+            }
         }
 
         let mut top_stack = String::new();
@@ -58,7 +70,22 @@ impl<'a> Day5<'a> {
         return top_stack;
     }
 
-    pub fn solution() -> Solution {
+    fn decode_instruction(line: &str) -> Instruction {
+        // Instructions will always be in the format "move # from # to #".
+        let split_instruction = line.trim_end().split_whitespace().collect::<Vec<&str>>();
+        Instruction {
+            count: split_instruction[1].parse::<u32>().unwrap(),
+            from: split_instruction[3].parse::<u32>().unwrap(),
+            to: split_instruction[5].parse::<u32>().unwrap(),
+        }
+    }
+}
+
+impl<'a> Solution for Day5<'a> {
+    type PartOne = String;
+    type PartTwo = String;
+
+    fn solution() -> (Self::PartOne, Self::PartTwo) {
         // We hardcode the starting stacks as given in the problem statement.
         let starting_stacks: Vec<Vec<&str>> = vec![
             ["T", "P", "Z", "C", "S", "L", "Q", "N"].to_vec(),
@@ -80,20 +107,8 @@ impl<'a> Day5<'a> {
 
         let mut day_5 = Day5::new(starting_stacks, instructions);
         let part_1_soln = day_5.part_1();
+        let part_2_soln = day_5.part_2();
 
-        return Solution {
-            part_1_soln,
-            part_2_soln: 0,
-        };
-    }
-
-    fn decode_instruction(line: &str) -> Instructions {
-        // Instructions will always be in the format "move # from # to #".
-        let split_instruction = line.trim_end().split_whitespace().collect::<Vec<&str>>();
-        Instructions {
-            count: split_instruction[1].parse::<u32>().unwrap(),
-            from: split_instruction[3].parse::<u32>().unwrap(),
-            to: split_instruction[5].parse::<u32>().unwrap(),
-        }
+        (part_1_soln, part_2_soln)
     }
 }
