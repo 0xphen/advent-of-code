@@ -14,7 +14,7 @@ impl<'a> Day4 {
     fn part_1(&self) -> u32 {
         let mut count = 0;
 
-        for (k, v) in &self.pair_map {
+        for (_k, v) in &self.pair_map {
             let (largest_vec, smallest_vec) = Day4::largest_vec(&v[0], &v[1]);
 
             let set_0: HashSet<_> = largest_vec.iter().collect();
@@ -32,7 +32,7 @@ impl<'a> Day4 {
     fn part_2(&self) -> u32 {
         let mut count = 0;
 
-        for (k, v) in &self.pair_map {
+        for (_k, v) in &self.pair_map {
             let (largest_vec, smallest_vec) = Day4::largest_vec(&v[0], &v[1]);
             let set_0: HashSet<_> = largest_vec.iter().collect();
             let is_subset = smallest_vec.iter().any(|item| set_0.contains(item));
@@ -58,7 +58,7 @@ impl<'a> Day4 {
             }
         }
 
-        let mut day_4 = Day4::new(pair_map);
+        let day_4 = Day4::new(pair_map);
         let part_1_soln = day_4.part_1();
         let part_2_soln = day_4.part_2();
 

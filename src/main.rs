@@ -18,4 +18,8 @@ fn main() {
     // Day 4
     let day_4_solution = day_4::solution::Day4::solution();
     println!("Day 4 solution : {:?} ", day_4_solution);
+
+    // Day 4
+    let day_5_solution = day_5::solution::Day5::solution();
+    println!("Day 5 solution : {:?} ", day_5_solution);
 }
