@@ -51,14 +51,25 @@ impl<'a> Day5<'a> {
                 .len()
                 .saturating_sub(instruction.count as usize);
 
+            if !rev {
+                println!("FROM {:?}", self.stacks[from_stack_index]);
+                println!("TO {:?}", self.stacks[to_stack_index]);
+            }
+
             let slice_stack = self.stacks[from_stack_index]
                 .drain(start_index..)
                 .collect::<Vec<&str>>();
+
+            if !rev {
+                println!("SLICE {:?}", slice_stack);
+            }
 
             if rev {
                 self.stacks[to_stack_index].extend(slice_stack.into_iter().rev());
             } else {
                 self.stacks[to_stack_index].extend(slice_stack.into_iter());
+
+                println!("END TO {:?}", self.stacks[to_stack_index]);
             }
         }
 
@@ -78,6 +89,11 @@ impl<'a> Day5<'a> {
             from: split_instruction[3].parse::<u32>().unwrap(),
             to: split_instruction[5].parse::<u32>().unwrap(),
         }
+    }
+
+    fn reset_stacks(&'a mut self, stacks: Vec<Vec<&'a str>>) {
+        self.stacks.clear();
+        self.stacks.extend(stacks);
     }
 }
 
@@ -105,9 +121,15 @@ impl<'a> Solution for Day5<'a> {
             .collect::<Result<Vec<String>, _>>()
             .unwrap();
 
-        let mut day_5 = Day5::new(starting_stacks, instructions);
+        let mut day_5 = Day5::new(starting_stacks.clone(), instructions.clone());
         let part_1_soln = day_5.part_1();
+
+        let mut day_5 = Day5::new(starting_stacks.clone(), instructions);
         let part_2_soln = day_5.part_2();
+
+        // clear the stack
+        // day_5.reset_stacks(starting_stacks);
+        // let part_2_soln = day_5.part_2();
 
         (part_1_soln, part_2_soln)
     }
