@@ -51,25 +51,14 @@ impl<'a> Day5<'a> {
                 .len()
                 .saturating_sub(instruction.count as usize);
 
-            if !rev {
-                println!("FROM {:?}", self.stacks[from_stack_index]);
-                println!("TO {:?}", self.stacks[to_stack_index]);
-            }
-
             let slice_stack = self.stacks[from_stack_index]
                 .drain(start_index..)
                 .collect::<Vec<&str>>();
-
-            if !rev {
-                println!("SLICE {:?}", slice_stack);
-            }
 
             if rev {
                 self.stacks[to_stack_index].extend(slice_stack.into_iter().rev());
             } else {
                 self.stacks[to_stack_index].extend(slice_stack.into_iter());
-
-                println!("END TO {:?}", self.stacks[to_stack_index]);
             }
         }
 

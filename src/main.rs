@@ -2,7 +2,7 @@ mod solutions;
 
 use crate::solutions::{
     day_1::solution::Day1, day_2::solution::Day2, day_3::solution::Day3, day_4::solution::Day4,
-    day_5::solution::Day5, traits::Solution,
+    day_5::solution::Day5, day_6::solution::Day6, traits::Solution,
 };
 
 fn main() {
@@ -20,4 +20,7 @@ fn main() {
 
     // Day 4
     println!("Day 5 solution : {:?} ", Day5::solution());
+
+    // Day 4
+    println!("Day 6 solution : {:?} ", Day6::solution());
 }
