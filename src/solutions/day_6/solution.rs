@@ -31,7 +31,7 @@ impl Solution for Day6 {
     type PartTwo = u32;
 
     fn solution() -> (Self::PartOne, Self::PartTwo) {
-        let packets = read_to_string("src/inputs/day_6_input.txt").unwrap();
+        let packets = read_to_string("src/inputs/day_6_input.txt").unwrap(); 
 
         let day_6 = Day6::new(packets);
         let part_1_soln = day_6.part_1();
